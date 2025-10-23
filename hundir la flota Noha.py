@@ -20,16 +20,41 @@ def colocar_barcos(tablero, lista):
            tablero[posicion] = "O"  
     return tablero
 
-#2b.colocar barcos en tableros: 
+#2b.colocar barcos en tableros:
+
 barcos_jug1 = [[(0, 1),(1,1)], [(3,2), (3,3),(3,4)]]
-barcos_jug2 = [[(2, 3),(2,4)], [(1,1), (2,1),(3,1)]]
+# esto fue de manera manual. 
+#barcos_jug2 = [[(2, 3),(2,4)], [(1,1), (2,1),(3,1)]]
+# esto es de manera random que intentaba hacer:
+
+
+def barcos_jug2():
+    barcos = [2, 3]
+    for length in barcos:
+        placed = False
+        while not placed:
+            orientation = random.choice(["H", "V"])
+            if orientation == "H":
+                fila = random.randint(0, 4)
+                col = random.randint(0, 5 - length)
+                if np.all(tablero_jug2[fila, col:col+length] == " "):
+                    tablero_jug2[fila, col:col+length] = "O"
+                    placed = True
+            else:  # Vertical
+                fila = random.randint(0, 5 - length)
+                col = random.randint(0, 4)
+                if np.all(tablero_jug2[fila:fila+length, col] == " "):
+                    tablero_jug2[fila:fila+length, col] = "O"
+                    placed = True
+
+    return tablero_jug2 
 
 print ("jugador 1" , "--"*10)
 tablero_1 = colocar_barcos(tablero_jug1,barcos_jug1)
 print(tablero_1) #####
 
 print ("ordinador" , "--"*10)
-tablero_2 = colocar_barcos(tablero_jug2, barcos_jug2)
+tablero_2 = barcos_jug2()
 print (tablero_2)
 
 
@@ -69,14 +94,14 @@ while barcos_flotando(tablero_1) and barcos_flotando(tablero_2):
         col = int(input("Columna: (0:4)"))
         tablero2, acierto = disparar(tablero_2, fila, col)
 
-        print("\n Tablero1 :") # Mostrar tablero1 despues de cada tiro
+        print("\nTu tablero:") # Mostrar tablero1 despues de cada tiro
         print(tablero_1)
         
-        # Mostrar tablero2: solo lo que jug1 ha descubierto(solo X y # visibles)
-        print("\n Tablero2  (lo que has descubierto):")
+        # Mostrar tablero2 con niebla (solo X y # visibles)
+        print("\nTablero2  (lo que has descubierto):")
         tablero2_visible = np.where(tablero_2 == "O", " ", tablero_2)
         print(tablero2_visible)
-        if acierto is False: # el momento de cambiar el turno
+        if acierto is False: # if miss, change turn
             turno = 2 
     else:
         fila = random.randint(0, 4)

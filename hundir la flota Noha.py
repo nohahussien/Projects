@@ -1,0 +1,93 @@
+
+import numpy as np
+import random
+
+
+
+#1a. crear tableros
+def tablero(): 
+    tablero = np.full((5,5), " ")
+    return tablero
+
+##1b.crear tableros sin verlos
+tablero_jug1 = tablero()
+tablero_jug2 = tablero()
+
+#2a. colocar barcos
+def colocar_barcos(tablero, lista):
+    for barco in lista:
+        for posicion in barco:
+           tablero[posicion] = "O"  
+    return tablero
+
+#2b.colocar barcos en tableros: 
+barcos_jug1 = [[(0, 1),(1,1)], [(3,2), (3,3),(3,4)]]
+barcos_jug2 = [[(2, 3),(2,4)], [(1,1), (2,1),(3,1)]]
+
+print ("jugador 1" , "--"*10)
+tablero_1 = colocar_barcos(tablero_jug1,barcos_jug1)
+print(tablero_1) #####
+
+print ("ordinador" , "--"*10)
+tablero_2 = colocar_barcos(tablero_jug2, barcos_jug2)
+print (tablero_2)
+
+
+#3a1. disparar y turnos:
+
+def disparar(tablero, fila, columna):
+    resultado = None 
+    if tablero[fila, columna]== "O":
+        print ("¡¡tocado!!")
+        tablero[fila, columna] = "X"
+        resultado = True
+    elif tablero[fila, columna]== " ":
+        print ("¡agua!")
+        tablero[fila, columna] = "#"
+        resultado = False
+
+    else:
+        print("Ya disparaste allí. Intenta otra vez.")
+        resultado = None
+
+    return tablero, resultado
+
+#3.a2 barcos que todavia flotan:  
+def barcos_flotando(tablero):
+    return np.any(tablero == "O")
+
+
+#3b. disparar y turnos:
+
+turno = 1  #  por defecto de Jugador 1
+
+while barcos_flotando(tablero_1) and barcos_flotando(tablero_2):
+    print(f"Turno del Jugador {turno}")
+    
+    if turno == 1:
+        fila = int(input("Fila: (0:4)"))
+        col = int(input("Columna: (0:4)"))
+        tablero2, acierto = disparar(tablero_2, fila, col)
+
+        print("\n Tablero1 :") # Mostrar tablero1 despues de cada tiro
+        print(tablero_1)
+        
+        # Mostrar tablero2: solo lo que jug1 ha descubierto(solo X y # visibles)
+        print("\n Tablero2  (lo que has descubierto):")
+        tablero2_visible = np.where(tablero_2 == "O", " ", tablero_2)
+        print(tablero2_visible)
+        if acierto is False: # el momento de cambiar el turno
+            turno = 2 
+    else:
+        fila = random.randint(0, 4)
+        col = random.randint(0, 4)
+        tabero1, acierto = disparar(tablero_1, fila, col)
+        if acierto is False:
+            turno = 1
+
+#4. Determinar el ganador
+
+if barcos_flotando(tablero_1):
+    print("¡Jugador 1 gana!")
+else:
+    print("¡El ordenador gana!")

@@ -22,7 +22,7 @@ def colocar_barcos(tablero, lista):
 
 #2b.colocar barcos en tableros:
 
-barcos_jug1 = [[(0, 1),(1,1)], [(3,2), (3,3),(3,4)]]
+barcos_jug1 = [[(0, 1),(1,1)],[(0, 3),(0,4)] [(3,2), (3,3),(3,4)]]
 # esto fue de manera manual. 
 #barcos_jug2 = [[(2, 3),(2,4)], [(1,1), (2,1),(3,1)]]
 # esto es de manera random que intentaba hacer:
